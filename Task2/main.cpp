@@ -29,23 +29,19 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-const unsigned int Y_SEGMENTS = 50;
-const unsigned int X_SEGMENTS = 50;
-
-
 int main() {
 	initGlfwWindow();
 
-	// ´´½¨´°¿Ú(¿í¡¢¸ß¡¢´°¿ÚÃû³Æ)
+	// åˆ›å»ºçª—å£(å®½ã€é«˜ã€çª—å£åç§°)
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 	if (window == NULL) {
-		// Èç¹û´°¿Ú´´½¨Ê§°Ü£¬Êä³öFailed to Create OpenGL Context
+		// å¦‚æœçª—å£åˆ›å»ºå¤±è´¥ï¼Œè¾“å‡ºFailed to Create OpenGL Context
 		cout << "Failed to Create OpenGL Context" << endl;
 		glfwTerminate();
 		return -1;
 	}
 
-	// ½«´°¿ÚµÄÉÏÏÂÎÄÉèÖÃÎªµ±Ç°Ïß³ÌµÄÖ÷ÉÏÏÂÎÄ
+	// å°†çª—å£çš„ä¸Šä¸‹æ–‡è®¾ç½®ä¸ºå½“å‰çº¿ç¨‹çš„ä¸»ä¸Šä¸‹æ–‡
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
@@ -54,7 +50,7 @@ int main() {
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	// ³õÊ¼»¯GLAD£¬¼ÓÔØOpenGLº¯ÊıÖ¸ÕëµØÖ·µÄº¯Êı
+	// åˆå§‹åŒ–GLADï¼ŒåŠ è½½OpenGLå‡½æ•°æŒ‡é’ˆåœ°å€çš„å‡½æ•°
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		cout << "Failed to initialize GLAD" << endl;
@@ -110,9 +106,10 @@ int main() {
 		 0.5f,  0.5f,  0.5f,
 		 0.5f,  0.5f,  0.5f,
 		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f, };
+		-0.5f,  0.5f, -0.5f
+	};
 
-	// Éú³É²¢°ó¶¨VAOºÍVBO
+	// ç”Ÿæˆå¹¶ç»‘å®šVAOå’ŒVBO
 	GLuint VAO; // == VAO
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
@@ -121,10 +118,10 @@ int main() {
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	// ½«¶¥µãÊı¾İ°ó¶¨ÖÁµ±Ç°Ä¬ÈÏµÄ»º³åÖĞ
+	// å°†é¡¶ç‚¹æ•°æ®ç»‘å®šè‡³å½“å‰é»˜è®¤çš„ç¼“å†²ä¸­
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// ÉèÖÃ¶¥µãÊôĞÔÖ¸Õë
+	// è®¾ç½®é¡¶ç‚¹å±æ€§æŒ‡é’ˆ
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
@@ -163,12 +160,13 @@ int main() {
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 		ourShader.setMat4("view", view);
 
+		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		// éšæ—¶é—´æ—‹è½¬
+		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+		ourShader.setMat4("model", model);
+
 		// render boxes
 		glBindVertexArray(VAO);
-
-		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-		ourShader.setMat4("model", model);
 
 		// render box
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -192,11 +190,11 @@ int main() {
 };
 
 void initGlfwWindow() {
-	// ³õÊ¼»¯GLFW
-	glfwInit();                                                     // ³õÊ¼»¯GLFW
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);                  // OpenGL°æ±¾Îª3.3£¬Ö÷´Î°æ±¾ºÅ¾ùÉèÎª3
+	// åˆå§‹åŒ–GLFW
+	glfwInit();                                                     // åˆå§‹åŒ–GLFW
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);                  // OpenGLç‰ˆæœ¬ä¸º3.3ï¼Œä¸»æ¬¡ç‰ˆæœ¬å·å‡è®¾ä¸º3
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // Ê¹ÓÃºËĞÄÄ£Ê½(ÎŞĞèÏòºó¼æÈİĞÔ)
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // ä½¿ç”¨æ ¸å¿ƒæ¨¡å¼(æ— éœ€å‘åå…¼å®¹æ€§)
 #ifdef __APPLE__
 	 // uncomment this statement to fix compilation on OS X
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
