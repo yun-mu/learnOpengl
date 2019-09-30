@@ -348,22 +348,10 @@ void processInput(GLFWwindow* window)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-		lightOn[0] = true;
-	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-		lightOn[1] = true;
-	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-		lightOn[2] = true;
-	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
-		lightOn[3] = true;
-	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
-		lightOn[4] = true;
-	if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
-		lightOn[5] = true;
-	if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS)
-		lightOn[6] = true;
-	if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS)
-		lightOn[7] = true;
+	for (int i = 0; i < 8; i++) {
+		if (glfwGetKey(window, GLFW_KEY_1+i) == GLFW_PRESS)
+			lightOn[i] = !lightOn[i];
+	}
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
